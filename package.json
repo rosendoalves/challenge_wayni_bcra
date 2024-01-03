@@ -1,0 +1,31 @@
+{
+  "name": "challenge_wayni_bcra",
+  "version": "1.0.0",
+  "description": "this challenge is usefull to read bcra files and popule a database with users information",
+  "main": "index.js",
+  "scripts": {
+    "start": "node --watch index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "bcra",
+    "debtor",
+    "loan"
+  ],
+  "author": "Rosendo Alves",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rosendoalves/challenge_wayni_bcra/issues"
+  },
+  "homepage": "https://github.com/rosendoalves/challenge_wayni_bcra#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "mongoose": "^8.0.3",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.56.0"
+  }
+}
