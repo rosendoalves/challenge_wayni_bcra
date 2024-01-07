@@ -1,16 +1,18 @@
 const express = require('express')
 const router = express.Router();
-const {createDebtor, getDebtor} = require('../../src/controller/debtorController')
-const multer = require('multer')
-const storage = multer.memoryStorage(); 
-const upload = multer({ storage: storage });
+const {createDebtor, getDebtor, deleteDebtor} = require('../../src/controller/debtorController')
+const {getEntity} = require('../../src/controller/entityController')
+const fileMiddleware = require('../middleware/fileMiddleware');
 
 
   router.get('/', (req, res) => {
     res.send("Hola, esta es la página de inicio");
   })
   
-  router.post('/debtor', upload.single('file'), createDebtor)
+  router.post('/debtor', fileMiddleware, createDebtor);
   router.get('/debtor', getDebtor)
+  router.delete('/debtor', deleteDebtor)
+  
+  router.get('/entity', getEntity)
 
 module.exports = router

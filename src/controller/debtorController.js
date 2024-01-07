@@ -1,16 +1,7 @@
 const Debtor = require("../../src/model/debtor");
-const { processContent } = require("../utils");
 
 const createDebtor = (req, res) => {
-  const file = req.file;
-
-  if (!file) {
-    return res.status(400).json({ error: "No file uploaded." });
-  }
-
-  const data = file.buffer.toString("utf-8"); 
-
-  const register = processContent(data);
+  const register = req.register; 
 
   Promise.all(register.map((register) => saveRegisterDb(register)))
     .then(() => {
@@ -26,32 +17,44 @@ const createDebtor = (req, res) => {
 
 const saveRegisterDb = (register) => {
     return new Promise((resolve, reject) => {
-      if (!register) {
-        const error = new Error('Registro no válido. Verifica que los datos sean correctos.');
-        console.error(error);
-        reject(error);
-        return;
-      }
-  
-      // Crea una instancia del modelo Debtor con los datos del registro
-      const newDebtor = new Debtor(register);
-  
-      // Guarda el documento en la base de datos
-      newDebtor.save()
-        .then(result => {
-          console.log('Guardado en la base de datos:', result);
-          resolve(result);
-        })
-        .catch(err => {
-          console.error('Error al guardar en la base de datos:', err);
-          reject(err);
-        });
-    });
+        if (!register || isNaN(register.code_identity) || isNaN(register.status)) {
+          const error = new Error('Registro no válido. Verifica que los datos sean correctos.');
+          console.error(error);
+          reject(error);
+          return;
+        }
+    
+        const newDebtor = new Debtor(register);
+    
+        newDebtor.save()
+          .then(result => {
+            resolve(result);
+          })
+          .catch(err => {
+            console.error('Error al guardar en la base de datos:', err);
+            reject(err);
+          });
+      });
   };
   
 
-const getDebtor = (req, res) => {
-  res.send("Building");
+const getDebtor = async (req, res) => {
+    try {
+        const debtors = await Debtor.find();
+        res.status(200).json(debtors);
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Error retrieving debtors from the database." });
+      }
+};
+const deleteDebtor = async (req, res) => {
+    try {
+        const debtors = await Debtor.deleteMany()
+        res.status(200).json(debtors);
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Error deleting debtors from the database." });
+      }
 };
 
-module.exports = { createDebtor, getDebtor };
+module.exports = { createDebtor, getDebtor,deleteDebtor };
