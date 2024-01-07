@@ -7,7 +7,7 @@ const createDebtor = (req, res) => {
     .then(() => {
       res
         .status(200)
-        .json({ message: "Files processed and saved in the database." });
+        .json({ message: "File processed and saved in the database." });
     })
     .catch((error) => {
       console.error("Error saving in the database:", error);
@@ -18,7 +18,7 @@ const createDebtor = (req, res) => {
 const saveRegisterDb = (register) => {
     return new Promise((resolve, reject) => {
         if (!register || isNaN(register.code_identity) || isNaN(register.status)) {
-          const error = new Error('Registro no válido. Verifica que los datos sean correctos.');
+          const error = new Error('Invalid register. Check data.');
           console.error(error);
           reject(error);
           return;
@@ -41,16 +41,19 @@ const saveRegisterDb = (register) => {
 const getDebtor = async (req, res) => {
     try {
         const debtors = await Debtor.find();
+        if(debtors.length === 0) {
+          return res.status(200).json({message: 'No data'})
+        }
         res.status(200).json(debtors);
       } catch (error) {
         console.error(error);
-        res.status(500).json({ error: "Error retrieving debtors from the database." });
+        res.status(500).json({ error: "Error retrieving debtors from the database" });
       }
 };
 const deleteDebtor = async (req, res) => {
     try {
-        const debtors = await Debtor.deleteMany()
-        res.status(200).json(debtors);
+        await Debtor.deleteMany()
+        res.status(200).json({ message: "All debtors were deleted" });
       } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Error deleting debtors from the database." });

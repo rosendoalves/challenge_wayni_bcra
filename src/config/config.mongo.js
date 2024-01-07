@@ -16,13 +16,11 @@ const mongoConnect = async () => {
     const existingEntity = await Entity.findOne({ code_entity: 72 });
 
     if (!existingEntity) {
-      // Si no existe, insertar el nuevo documento
       const entitiesData = [
         {
           code_entity: 72,
           sum_loan: 0,
         },
-        // Agrega más objetos de datos según sea necesario
       ];
 
       await Entity.insertMany(entitiesData);

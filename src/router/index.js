@@ -1,18 +1,40 @@
-const express = require('express')
+const express = require("express");
 const router = express.Router();
-const {createDebtor, getDebtor, deleteDebtor} = require('../../src/controller/debtorController')
-const {getEntity} = require('../../src/controller/entityController')
-const fileMiddleware = require('../middleware/fileMiddleware');
+const {
+  createDebtor,
+  getDebtor,
+  deleteDebtor,
+} = require("../../src/controller/debtorController");
+const { getEntity } = require("../../src/controller/entityController");
+const fileMiddleware = require("../middleware/fileMiddleware");
+const swaggerJSDoc = require("swagger-jsdoc");
+const swaggerUiExpress = require("swagger-ui-express");
+const swaggerOptions = {
+  definition: {
+    openapi: "3.0.1",
+    info: {
+      title: "Wayni Challenge By Rosendo Alves",
+      description: "Documentation about API usage",
+    },
+  },
+  apis: [`${__dirname}/../docs/**/*.yaml`],
+};
+const specs = swaggerJSDoc(swaggerOptions);
 
+router.get("/", (req, res) => {
+  res.redirect('/docs')
+});
 
-  router.get('/', (req, res) => {
-    res.send("Hola, esta es la página de inicio");
-  })
-  
-  router.post('/debtor', fileMiddleware, createDebtor);
-  router.get('/debtor', getDebtor)
-  router.delete('/debtor', deleteDebtor)
-  
-  router.get('/entity', getEntity)
+router.use("/docs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
 
-module.exports = router
+router.post("/debtor", fileMiddleware, createDebtor);
+router.get("/debtor", getDebtor);
+router.delete("/debtor", deleteDebtor);
+
+router.get("/entity", getEntity);
+
+router.use((req, res) => {
+  res.redirect('/')
+});
+
+module.exports = router;

@@ -1,0 +1,45 @@
+openapi: "3.1.0"
+info:
+  title: Api Entities
+  version: "1.0"
+paths:
+  /entity:
+    get:
+      summary: 'Obtain all entities'
+      tags:
+      - Entity
+      responses:
+        "200":
+          description: All entities obtained
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: "#/components/schemas/Entity"
+        "400":
+          description: Bad request
+        "401":
+          description: Unauthorized
+        "403":
+          description: No allowed
+        "500":
+          description: Server error
+
+components:
+  schemas:
+    Entity:
+      type: object
+      properties:
+        _id:
+          type: String
+          description: Mongo Id
+          example: '64001335ff13c54357a71000'
+        code_entity:
+          type: Number
+          description: Number specific to identify the entity
+          example: 72
+        sum_loan:
+          type: Number
+          description: Sum of loan belongs to debtors related to the entity
+          

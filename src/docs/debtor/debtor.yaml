@@ -1,0 +1,113 @@
+openapi: "3.1.0"
+info:
+  title: Api Debtors
+  version: "1.0"
+paths:
+  /debtor:
+    get:
+      summary: 'Obtain all debtors'
+      tags:
+      - Debtors
+      responses:
+        "200":
+          description: All debtors obtained
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: "#/components/schemas/Debtor"
+            examples:
+          application/json: 
+            - _id: '64001335ff13c54357a71000'
+              code_identity: 72
+              status: 72
+              loan: 10000
+            - _id: '64001335ff13c54357a71001'
+              code_identity: 73
+              status: 73
+              loan: 15000
+        "400":
+          description: Bad request
+        "401":
+          description: Unauthorized
+        "403":
+          description: No allowed
+        "500":
+          description: Server error
+    post:
+      summary: 'Upload file of debtors'
+      tags:
+      - Debtors
+      responses:
+        "200":
+          description: Files processed and saved in the database
+        "400":
+          description: Bad request
+        "401":
+          description: Unauthorized
+        "403":
+          description: No allowed
+        "500":
+          description: Server error
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+            encoding:
+              file:
+                contentType: "application/octet-stream" 
+
+    delete:
+      summary: 'Delete all debtors'
+      tags:
+      - Debtors
+      responses:
+        "200":
+          description: All debtors were deleted
+        "400":
+          description: Bad request
+        "401":
+          description: Unauthorized
+        "403":
+          description: No allowed
+        "500":
+          description: Server error
+
+components:
+  schemas:
+    Debtor:
+      type: object
+      properties:
+        _id:
+          type: String
+          description: Mongo Id
+          example: '64001335ff13c54357a71000'
+        code_identity:
+          type: Number
+          description: Legal ID of debtor
+          example: 72
+        status:
+          type: Number
+          description: Specific number for financial situation of debtor
+          example: 5
+        loan:
+          type: Number
+          description: Sum of loan belongs to debtor
+          example: 1000
+  requestBodies:
+    uploadFile:
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              file:
+                type: string
+                format: binary
