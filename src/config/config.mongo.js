@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const { userDb, passDb } = require('./db.config');
 const Entity = require('../model/entity');
-const Debtor = require('../model/debtor');
 
 const mongoConnect = async () => {
   const DB_URI = `mongodb+srv://${userDb}:${passDb}@cluster0.zygdc.mongodb.net/wayni_bcra?retryWrites=true&w=majority`;
@@ -28,9 +27,7 @@ const mongoConnect = async () => {
 
       await Entity.insertMany(entitiesData);
       console.log('Seeder executed successfully');
-    } else {
-      console.log('Entity with code_entity 72 already exists. Skipping insertion.');
-    }
+    } 
   } catch (error) {
     console.error('Error connecting to the database:', error.message);
   }
