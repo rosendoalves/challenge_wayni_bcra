@@ -42,4 +42,5 @@ components:
         sum_loan:
           type: Number
           description: Sum of loan belongs to debtors related to the entity
+          example: 1000
           

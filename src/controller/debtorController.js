@@ -1,7 +1,9 @@
 const Debtor = require("../../src/model/debtor");
 
-const createDebtor = (req, res) => {
+const createDebtor = async (req, res) => {
   const register = req.register; 
+
+  await Debtor.deleteMany();
 
   Promise.all(register.map((register) => saveRegisterDb(register)))
     .then(() => {

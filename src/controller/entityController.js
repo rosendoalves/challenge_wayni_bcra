@@ -3,28 +3,30 @@ const Entity = require("../model/entity");
 
 const getEntity = async (req, res) => {
   try {
-    const entity = await Entity.findOne({ code_entity: 72 });
+    const entities = await Entity.find();
     
-    if (!entity) {
-      return res.status(404).send('Entidad no encontrada');
+    if (!entities || entities.length === 0) {
+      return res.status(404).send('No se encontraron entidades');
     }
 
-    const debtors = await Debtor.find({ code_entity: entity.code_entity });
+    for (const entity of entities) {
+      const debtors = await Debtor.find({ code_entity: entity.code_entity });
 
-    const sumLoan = debtors.reduce((total, debtor) => total + debtor.loan, 0);
+      const sumLoan = debtors.reduce((total, debtor) => total + debtor.loan, 0);
 
-    if (debtors.length > 0) {
-      await Entity.findByIdAndUpdate(entity._id, { sum_loan: sumLoan.toFixed(2) });
-    } else {
-      await Entity.findByIdAndUpdate(entity._id, { sum_loan: 0 });
+      if (debtors.length > 0) {
+        await Entity.findByIdAndUpdate(entity._id, { sum_loan: sumLoan.toFixed(2) });
+      } else {
+        await Entity.findByIdAndUpdate(entity._id, { sum_loan: 0 });
+      }
     }
 
-    const updatedEntity = await Entity.findById(entity._id);
+    const updatedEntities = await Entity.find();
 
-    res.status(200).send(updatedEntity);
+    res.status(200).send(updatedEntities);
   } catch (error) {
-    console.log(error)
-    res.status(500).send('No es posible consultar la entidad')
+    console.log(error);
+    res.status(500).send('No es posible consultar las entidades');
   }
 };
 

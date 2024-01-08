@@ -9,6 +9,7 @@ const { getEntity } = require("../../src/controller/entityController");
 const fileMiddleware = require("../middleware/fileMiddleware");
 const swaggerJSDoc = require("swagger-jsdoc");
 const swaggerUiExpress = require("swagger-ui-express");
+const { verifyEntities } = require("../middleware/entityMiddleware");
 const swaggerOptions = {
   definition: {
     openapi: "3.0.1",
@@ -27,7 +28,7 @@ router.get("/", (req, res) => {
 
 router.use("/docs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
 
-router.post("/debtor", fileMiddleware, createDebtor);
+router.post("/debtor", fileMiddleware, verifyEntities, createDebtor);
 router.get("/debtor", getDebtor);
 router.delete("/debtor", deleteDebtor);
 
