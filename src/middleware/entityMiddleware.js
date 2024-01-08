@@ -18,10 +18,9 @@ const verifyEntities = async (req, res, next) => {
       const existingEntity = await Entity.findOne({ code_entity: codeEntity });
 
       if (!existingEntity) {
-        // Si la entidad no existe, la creamos
         const newEntity = new Entity({
           code_entity: codeEntity,
-          sum_loan: 0, // Puedes ajustar según tus necesidades
+          sum_loan: 0, 
         });
         await newEntity.save();
       }
